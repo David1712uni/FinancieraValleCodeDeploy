@@ -4,17 +4,13 @@ FROM python:3.9-slim
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el archivo de dependencias (requirements.txt)
-# Asegúrate de tener este archivo con las dependencias de tu proyecto Django
-COPY requirements.txt ./
-
-# Instala las dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia todo el código fuente de tu proyecto a /app
+# Copia el código fuente de la aplicación
 COPY . .
 
-# Expón el puerto que utilizará tu aplicación Django (por defecto Django usa el puerto 8000)
+# Instala las dependencias directamente
+RUN pip install --no-cache-dir Django
+
+# Expón el puerto que utilizará tu aplicación Django
 EXPOSE 8000
 
 # Comando para ejecutar el servidor de desarrollo de Django
