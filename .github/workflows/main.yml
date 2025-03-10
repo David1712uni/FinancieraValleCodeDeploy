@@ -23,7 +23,14 @@ jobs:
         run: |
           echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
           echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-
+      # Instalar sonar-scanner
+      - name: Install SonarScanner
+        run: |
+          # Descargar e instalar sonar-scanner
+          curl -sSLo sonar-scanner.zip https://github.com/SonarSource/sonar-scanner-cli/releases/download/4.6.2.2472/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonar-scanner.zip -d /opt
+          export PATH=/opt/sonar-scanner-4.6.2.2472-linux/bin:$PATH
+          echo "SonarScanner instalado"
       # Paso de integración con SonarCloud (Analizar código)
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v1.5
