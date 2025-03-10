@@ -26,8 +26,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=swaraj1-sys
-            -Dsonar.projectKey=SonarCloudCodeAnalysis
+            -Dsonar.organization=David Caruzo Cieza
+            -Dsonar.projectKey=david1712uni
             -Dsonar.python.coverage.reportPaths=coverage.xml
         # Esperar a que SonarCloud evalúe el Quality Gate
       - name: Wait for SonarCloud Quality Gate
