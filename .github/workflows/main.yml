@@ -29,7 +29,7 @@ jobs:
         run: |
           # Esperar a que SonarCloud evalúe el Quality Gate
           echo "Esperando el resultado del Quality Gate..."
-          SONAR_PROJECT_KEY=$(curl -s -u "${{ secrets.SONAR_TOKEN }}": "https://sonarcloud.io/api/project_branches/list?project=${{ secrets.SONAR_PROJECT_KEY }}" | jq -r '.branches[0].analysisDate')
+          SONAR_PROJECT_KEY=$(curl -s -u "${{ secrets.SONAR_TOKEN }}": "https://sonarcloud.io/api/project_branches/list?project=${{ David1712uni_FinancieraValle }}" | jq -r '.branches[0].analysisDate')
           
           # Tiempo de espera (hasta que el análisis esté listo)
           MAX_WAIT_TIME=300
@@ -38,7 +38,7 @@ jobs:
           
           # Comprobar cada 15 segundos hasta el máximo de 5 minutos (300 segundos)
           while [ "$TIME_WAITED" -lt "$MAX_WAIT_TIME" ]; do
-            ANALYSIS_STATUS=$(curl -s -u "${{ secrets.SONAR_TOKEN }}": "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}" | jq -r .projectStatus.status)
+            ANALYSIS_STATUS=$(curl -s -u "${{ secrets.SONAR_TOKEN }}": "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ David1712uni_FinancieraValle }}" | jq -r .projectStatus.status)
             if [ "$ANALYSIS_STATUS" == "OK" ]; then
               echo "Quality Gate passed!"
               exit 0
