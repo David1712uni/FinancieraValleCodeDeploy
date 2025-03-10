@@ -18,12 +18,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      
+      # Exportar JAVA_HOME (si es necesario para otras herramientas)
+      - name: Set JAVA_HOME
+        run: echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
+        
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v1.5
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          JAVA_HOME: ${{ env.JAVA_HOME }}  # Usar JAVA_HOME correctamente
         with:
           args: >
             -Dsonar.organization=David Caruzo Cieza
