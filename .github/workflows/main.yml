@@ -18,10 +18,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      # Exportar JAVA_HOME (si es necesario para otras herramientas)
-      - name: Set JAVA_HOME
-        run: echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
-        
+      # Añadir el binario de Java al PATH
+      - name: Add Java to PATH
+        run: |
+          echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
+          echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
+
+      # Paso de integración con SonarCloud (Analizar código)
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v1.5
         env:
