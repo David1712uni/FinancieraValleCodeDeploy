@@ -24,13 +24,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64
         with:
           args: >
             -Dsonar.organization=David Caruzo Cieza
             -Dsonar.projectKey=david1712uni
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.java.jdkHome=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64  # Ruta explícita a JDK
+            
         # Esperar a que SonarCloud evalúe el Quality Gate
       - name: Wait for SonarCloud Quality Gate
         uses: sonarsource/sonarcloud-github-action@v1.5
