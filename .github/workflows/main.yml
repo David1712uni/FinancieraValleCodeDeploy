@@ -9,11 +9,11 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
 
       # Paso de integración con SonarCloud (Analizar código)
-      - name: Set up JDK 17 for SonarCloud
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
