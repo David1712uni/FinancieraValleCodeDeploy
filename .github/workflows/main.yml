@@ -10,6 +10,34 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
+
+
+      # Paso de integración con SonarCloud (Analizar código)
+      - name: Set up JDK 17 for SonarCloud
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v1.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=swaraj1-sys
+            -Dsonar.projectKey=SonarCloudCodeAnalysis
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+        # Esperar a que SonarCloud evalúe el Quality Gate
+      - name: Wait for SonarCloud Quality Gate
+        uses: sonarsource/sonarcloud-github-action@v1.5
+        with:
+          check-quality-gate: true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # Esto asegurará que el flujo de trabajo falle si el Quality Gate no pasa
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
