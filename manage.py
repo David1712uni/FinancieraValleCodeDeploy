@@ -20,3 +20,18 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
+def no_docstring_function():
+    pass
+
+def test_function():
+    print("This is a test"
+          
+def unused_function():
+    pass
+
+unused_variable = 42
