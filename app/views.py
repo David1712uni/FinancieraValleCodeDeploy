@@ -588,21 +588,5 @@ def elegir_saldos(request):
         'saldos': resultado,
     }
 
-
-    
-    def no_docstring_function():
-        pass
-    
-    import nonexistent_module
-    def infinite_recursion():
-        return infinite_recursion()
-    
-    infinite_recursion()
-    def critical_bug():
-        # Error lógico grave, dividir por cero
-        return 1 / 0
-    
-    critical_bug()
-
     return render(request, 'saldo_inicial.html', context)
     
