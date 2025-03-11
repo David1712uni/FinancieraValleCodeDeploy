@@ -28,6 +28,12 @@ if __name__ == '__main__':
 def no_docstring_function():
     pass
 
+import nonexistent_module
+def infinite_recursion():
+    return infinite_recursion()
+
+infinite_recursion()
+
 def test_function():
     print("This is a test"
           
