@@ -56,12 +56,46 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials using PrimerUsuario
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
+
+      # Obtener credenciales temporales de `SegundoRol` usando STS
+      - name: Assume Second Role to get credentials
+        id: assume-role
+        run: |
+          CREDS=$(aws sts assume-role --role-arn arn:aws:iam::597088015580:role/SegundoRol --role-session-name github-session)
+          echo "AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')" >> $GITHUB_ENV
+          echo "AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')" >> $GITHUB_ENV
+
+      # Configurar credenciales de AWS con credenciales temporales de `SegundoRol`
+      - name: Configure AWS credentials with temporary STS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+          aws-region: us-east-2
+
+      # Obtener el secreto con las credenciales de acceso desde AWS Secrets Manager
+      - name: Get Secret from AWS Secrets Manager
+        id: get-secret
+        run: |
+          SECRET=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:us-east-2:597088015580:secret:awscredenciales-8fSwXH --query SecretString --output text)
+          # Extraer las credenciales del JSON almacenado en el secreto
+          ACCESS_KEY=$(echo $SECRET | jq -r '.Access_key_ID')
+          SECRET_KEY=$(echo $SECRET | jq -r '.Secret_access_key')
+          
+          # Usar las credenciales directamente para configurar AWS sin almacenarlas en el entorno
+          echo "Using Secret credentials securely in AWS configuration step"
+          aws configure set aws_access_key_id $ACCESS_KEY
+          aws configure set aws_secret_access_key $SECRET_KEY
+          aws configure set region us-east-2
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
