@@ -68,9 +68,17 @@ jobs:
         id: assume-role
         run: |
           CREDS=$(aws sts assume-role --role-arn arn:aws:iam::597088015580:role/SegundoRol --role-session-name github-session)
-          echo "AWS_ACCESS_KEY_ID=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')" >> $GITHUB_ENV
-          echo "AWS_SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')" >> $GITHUB_ENV
+          ACCESS_KEY=$(echo $CREDS | jq -r '.Credentials.AccessKeyId')
+          SECRET_KEY=$(echo $CREDS | jq -r '.Credentials.SecretAccessKey')
+          SESSION_TOKEN=$(echo $CREDS | jq -r '.Credentials.SessionToken')
+      
+          echo "::add-mask::$ACCESS_KEY"
+          echo "::add-mask::$SECRET_KEY"
+          echo "::add-mask::$SESSION_TOKEN"
+      
+          echo "AWS_ACCESS_KEY_ID=$ACCESS_KEY" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=$SECRET_KEY" >> $GITHUB_ENV
+          echo "AWS_SESSION_TOKEN=$SESSION_TOKEN" >> $GITHUB_ENV
 
       # Configurar credenciales de AWS con credenciales temporales de `SegundoRol`
       - name: Configure AWS credentials with temporary STS credentials
@@ -86,18 +94,18 @@ jobs:
         id: get-secret
         run: |
           SECRET=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:us-east-2:597088015580:secret:awscredenciales-8fSwXH --query SecretString --output text)
-          # Extraer las credenciales del JSON almacenado en el secreto
+
+          echo "::add-mask::$SECRET"
+
           ACCESS_KEY=$(echo $SECRET | jq -r '.Access_key_ID')
           SECRET_KEY=$(echo $SECRET | jq -r '.Secret_access_key')
-
-          # Guardar las credenciales directamente en el entorno sin exponerlas en los logs
+      
           echo "::add-mask::$ACCESS_KEY"
           echo "::add-mask::$SECRET_KEY"
-
-          # Usar las credenciales directamente para configurar AWS sin almacenarlas en el entorno
+      
           echo "AWS_ACCESS_KEY_ID=$ACCESS_KEY" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=$SECRET_KEY" >> $GITHUB_ENV
-
+                
       # Configurar AWS con las credenciales obtenidas del secreto
       - name: Configure AWS credentials with the secret credentials
         uses: aws-actions/configure-aws-credentials@v4
