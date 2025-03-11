@@ -20,29 +20,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-def no_docstring_function():
-    pass
-
-import nonexistent_module
-def infinite_recursion():
-    return infinite_recursion()
-
-infinite_recursion()
-def critical_bug():
-    # Error lógico grave, dividir por cero
-    return 1 / 0
-
-critical_bug()
-
-def test_function():
-    print("This is a test"
-          
-def unused_function():
-    pass
-
-unused_variable = 42
