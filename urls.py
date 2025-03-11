@@ -21,3 +21,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include ('app.urls')),
 ]
+
+def example_function():
+  x=5    # Espacio mal usado
+  print (x)  # Espacio innecesario
+def process_data():
+    # FIXME: Needs to handle empty data cases
+    data = [1, 2, 3]
+    return data
+
+def main():
+    process_data()
+
+if __name__ == "__main__":
+    main()
