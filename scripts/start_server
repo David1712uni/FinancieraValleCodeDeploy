@@ -1,4 +1,4 @@
 #!/bin/bash
 cd /home/ec2-user/application
 # Iniciar el servidor de desarrollo de Django
-nohup python3 manage.py runserver 0.0.0.0:8000 > /home/ec2-user/application/server.log 2>&1 &
+nohup python3 manage.py runserver 0.0.0.0:80 > /home/ec2-user/application/server.log 2>&1 &
