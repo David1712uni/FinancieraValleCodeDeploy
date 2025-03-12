@@ -278,7 +278,7 @@ def index(request):
         'form': form,
         'valores_cuentas': valores_cuentas,
         'valores_tipo_monto': valores_tipo_monto,
-        'errors': form.errors if form.errors else None
+        'errors': form.errors if form.errors else None,
         'imagen_url': imagen_url  # Pasamos la URL de la imagen al contexto
     }
     return render(request, 'index.html', context)
