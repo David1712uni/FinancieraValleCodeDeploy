@@ -261,7 +261,7 @@ def get_tipo_cuenta(cuenta):
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
-@require_http_methods(["GET", "POST"])  # Only allow GET and POST
+
 @csrf_protect  # To ensure CSRF protection for POST requests
 def index(request):
     if request.method == 'POST':
@@ -437,7 +437,7 @@ def calcular_situacion_financiera(asientos):
         'total_activo': total_activo, 'total_pasivo': total_pasivo, 'total_patrimonio': total_patrimonio,
         'total_pasivo_patrimonio': total_pasivo_patrimonio
     }
-@require_http_methods(["GET", "POST"])  # Only allow GET and POST
+
 @csrf_protect  # To ensure CSRF protection for POST requests
 def mostrar_resultados(request):
     # Obtener fechas de inicio y fin desde el formulario
@@ -479,7 +479,6 @@ def mostrar_resultados(request):
     return render(request, 'resultados.html', context)
 
 
-@require_http_methods(["GET", "POST"])  # Only allow GET and POST
 @csrf_protect  # To ensure CSRF protection for POST requests
 def elegir_saldos(request):
     saldo_form = SaldoInicialForm(request.POST or None)
