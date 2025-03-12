@@ -1,11 +1,8 @@
 #!/bin/bash
-# Activar entorno virtual (si lo estás usando)
-# cd /home/ec2-user/app
-# source venv/bin/activate
 
-# Si no estás usando un entorno virtual, puedes instalar Django directamente
+
 pip3 install django
 
 # Ejecutar las migraciones de la base de datos, si es necesario
-cd /home/ec2-user/app
+cd /home/ec2-user/application
 python3 manage.py migrate
