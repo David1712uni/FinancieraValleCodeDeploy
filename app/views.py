@@ -569,47 +569,6 @@ def mostrar_resultados(request):
 
     return render(request, 'resultados.html', context)
 @csrf_protect  # To ensure CSRF protection for POST requests
-def mostrar_resultados(request):
-    # Obtener fechas de inicio y fin desde el formulario
-    fecha_inicio = request.GET.get('fecha_inicio')
-    fecha_final = request.GET.get('fecha_final')
-
-    # Filtrar los asientos contables según las fechas
-    if fecha_inicio and fecha_final:
-        fecha_inicio = timezone.datetime.strptime(fecha_inicio, '%Y-%m-%d')
-        fecha_final = timezone.datetime.strptime(fecha_final, '%Y-%m-%d')
-        asientos = AsientoContable.objects.filter(fecha__range=(fecha_inicio, fecha_final))
-    else:
-        asientos = AsientoContable.objects.all()
-
-    saldos = Saldo_Inicial.objects.all()
-
-    # Calcular los mayores, mayores por cuenta específica, estado de resultados y situación financiera
-    resultados_mayores = calcular_mayores(asientos)
-    resultados_mayores_ce = calcular_mayores_ce(asientos, saldos)
-    estado_resultados, utilidad_bruta, utilidad_operacion, utilidad_antes_impuestos, utilidad_neta = calcular_estado_resultados(asientos)
-    estado_situacion_financiera = calcular_situacion_financiera(asientos)
-
-    context = {
-        'libro_diario': [(asiento.fecha, asiento.cuenta, cuentas_dict[asiento.tipo_cuenta], asiento.glose, obtener_monto(asiento, 'Debe'), obtener_monto(asiento, 'Haber')) for asiento in asientos],
-        'resultados_mayores': resultados_mayores,
-        'resultados_mayores_ce': resultados_mayores_ce,
-        'estado_resultados': {
-            'ventas': estado_resultados['ventas'], 'costo_ventas': estado_resultados['costo_ventas'],
-            'utilidad_bruta': utilidad_bruta, 'gastos_administrativos': estado_resultados['gastos_administrativos'],
-            'gastos_ventas': estado_resultados['gastos_ventas'], 'utilidad_operacion': utilidad_operacion,
-            'otros_ingresos': estado_resultados['otros_ingresos'], 'ingresos_financieros': estado_resultados['ingresos_financieros'],
-            'otros_gastos': estado_resultados['otros_gastos'], 'gastos_financieros': estado_resultados['gastos_financieros'],
-            'utilidad_antes_impuestos': utilidad_antes_impuestos, 'impuesto_renta': estado_resultados['impuesto_renta'],
-            'utilidad_neta': utilidad_neta,
-        },
-        'estado_situacion_financiera': estado_situacion_financiera,
-    }
-
-    return render(request, 'resultados.html', context)
-
-
-@csrf_protect  # To ensure CSRF protection for POST requests
 def elegir_saldos(request):
     saldo_form = SaldoInicialForm(request.POST or None)
     if request.method == 'POST' and 'modificar_saldo' in request.POST:
