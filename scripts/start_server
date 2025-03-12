@@ -1,0 +1,4 @@
+#!/bin/bash
+cd /home/ec2-user/application
+# Iniciar el servidor de desarrollo de Django
+python3 manage.py runserver 0.0.0.0:80
