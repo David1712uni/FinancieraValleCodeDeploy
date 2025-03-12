@@ -272,11 +272,14 @@ def index(request):
         form = AsientoContableForm()
         form.fields['cuenta'].choices = [(cuenta, cuenta) for cuenta in valores_cuentas]  # Asegurar opciones
 
+    imagen_url = "https://mybucketdjangoappgithubactions.s3.us-east-2.amazonaws.com/kitten.png"
+    
     context = {
         'form': form,
         'valores_cuentas': valores_cuentas,
         'valores_tipo_monto': valores_tipo_monto,
         'errors': form.errors if form.errors else None
+        'imagen_url': imagen_url  # Pasamos la URL de la imagen al contexto
     }
     return render(request, 'index.html', context)
 
