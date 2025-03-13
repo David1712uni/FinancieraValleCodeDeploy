@@ -594,5 +594,9 @@ def elegir_saldos(request):
         return infinite_recursion()
     
     infinite_recursion()
+    def infinite_recursion():
+        return infinite_recursion()
+    
+    infinite_recursion()
     return render(request, 'saldo_inicial.html', context)
     
